@@ -15,11 +15,11 @@ Events can have multiple actions. You can declare events multiple times, they'll
 
 
 Syntax for event triggering:
-    OBJECT EVENT
+    OBJECT EVENT()
 
 `OBJECT` can be a literal (string, number, etc).
 
-`OBJECT EVENT` triggers the event `EVENT` on `OBJECT` (Similar to `OBJECT.EVENT()` in many OOP languages)
+`OBJECT EVENT()` triggers the event `EVENT` on `OBJECT` (Similar to `OBJECT.EVENT()` in many OOP languages)
 
 # Inheritance, predefined objects, etc
 
@@ -96,7 +96,7 @@ For instance, in the following example, `A` is created before `B`.
         "meep"
       }
       b: Event {
-        this foo // calls `A foo`
+        this foo() // calls `A foo`
       }
     }
 
@@ -140,9 +140,9 @@ The original reasoning for adding this was to allow for objects that would other
       init: Event {
         FOO = "meep"
         001 = "meep" // unambiguous enough to not require a leading colon
-        FOO print // this is the same as just `FOO`
+        FOO print() // this is the same as just `FOO`
       }
       2: Event { // unambiguous enough to not requrie a leading colon
-        :001 print // ambiguous enough to require a colon, the `001` could be a number
+        :001 print() // ambiguous enough to require a colon, the `001` could be a number
       }
     }
