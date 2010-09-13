@@ -20,7 +20,7 @@ IRC: Socket {
   receiveLine: Event (line) {
     words = line split(" ")
     if (words[0] == "PING") {
-      ("PONG " + words[1..-1]) send
+      ("PONG " + words[1..-1]) send()
     } else if (words[1] == "001") {
       :001()
     }
