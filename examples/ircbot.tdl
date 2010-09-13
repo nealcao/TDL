@@ -1,0 +1,37 @@
+IRC: Socket {
+  /*
+    You can define events that only work from inside a particular class
+    *insert mass suicide before people see how amazing this looks later*
+  */
+  String send: Event {
+    parent send(self)
+  }
+
+  run: Event {
+    connect ("irc.ninthbit.net", 6667)
+    "USER a b c d" send()
+    "NICK foobar" send()
+  }
+
+  001: Event {
+    "JOIN #programming" send()
+  }
+
+  receiveLine: Event (line) {
+    words = line split(" ")
+    if (words[0] == "PING") {
+      ("PONG " + words[1..-1]) send
+    } else if (words[1] == "001") {
+      :001()
+    }
+  }
+
+  quit: Event {
+    "QUIT :Boom" send()
+  }
+}
+
+init: Event {
+  bot: IRC
+  bot run
+}
