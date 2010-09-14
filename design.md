@@ -21,15 +21,17 @@ Syntax for event triggering:
 
 `OBJECT EVENT()` triggers the event `EVENT` on `OBJECT` (Similar to `OBJECT.EVENT()` in many OOP languages)
 
-# Inheritance, predefined objects, etc
+# Inheritance and predefined objects
 
-Non-existant objects are references to the `null` object.
+Non-existant objects are references to the `null` object (predefined).
 
 `Object` inherits from `null` and adds methods to it.
 
 Objects - excluding `null`, `true`, and `false` - all inherit from the object `Object`.
 
-Events all inherit from the object `Event`.
+Events all inherit from the object `Event` (predefined).
+
+Constructs all inherit from the object `Construct` (predefined).
 
 Numbers all inherit from the object `Number`.
 
@@ -42,6 +44,35 @@ Arrays all inherit from the object `Array`.
 Hashes all inherit from the object `Hash`.
 
 All events without a receiver are ran on the `Ground` object.
+
+# Predefined events
+
+The following predefined events exist on all objects:
+    __clone__()
+    __print__(item)
+    __string_length__()
+    __string_concat__(other)
+    __string_replace__(current, other, all) // `all` is `true` if you want to replace all instances,
+                                            // and `false` otherwise
+    __substring__(position)
+    __substring_replace__(position, value)
+    __add__(number)
+    __substract__(number)
+    __multiply__(number)
+    __divide__(number)
+    __modulo__(number)
+    __pow__(number)
+    __left_shift__(other)
+    __right_shift__(other)
+    __bitwise_and__(other)
+    __bitwise_or__(other)
+    __bitwise_xor__(other)
+    __lt_gt_equal__(other)
+    __number_floor__()
+    __number_to_string__()
+    __array_get__(i)
+    __array_set__(i, value)
+    __array_length__()
 
 # Ground object
 
