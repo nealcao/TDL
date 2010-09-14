@@ -80,6 +80,19 @@ Object: true {
     this = other clone()
   }
 
+  ==: Event(other) {
+    // Yea I'm not entirely sure about this
+    if(other name == this name || other parent == this name) {
+      true
+    } else {
+      false
+    }
+  }
+
+  !=: Event(other) {
+    !(this == other)
+  }
+
   id = __id__
   name = __name__
 
@@ -94,6 +107,22 @@ Object: true {
     __print__(this id)
     __print__(">")
   }
+}
+
+# Add more events to `true`
+true {
+  ==: Event(other) { other true?() }
+  !=: Event(other) { other false?() }
+  |: Event(other) { this }
+  &: Event(other) { other true?() }
+}
+
+# Add more events to `false`
+false {
+  ==: Event(other) { other false?() }
+  !=: Event(other) { other true?() }
+  |: Event(other) { other true?() }
+  &: Event(other) { this }
 }
 
 Ground: Object {
