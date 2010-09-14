@@ -1,0 +1,77 @@
+/*
+ * core.tdl - Copyright (c) 2010 Nick Markwell
+ *
+ * Core definitions of TDL
+ */
+
+null: __null__ // `__null__` is the built-in object
+true: null
+false: null
+
+# `null` is originally defined elsewhere
+null {
+  ==: Event(other) {
+    this equals?(other)
+  }
+
+  !=: Event(other) {
+    this equals?(other) negate()
+  }
+
+  !: Event { false }
+
+  true?:  Event { false }
+  false?: Event { true }
+  null?:  Event { true }
+}
+
+true {
+  !: Event { false }
+  true?:  Event { true }
+  false?: Event { false }
+  null?:  Event { false }
+}
+
+false {
+  !: Event { true }
+  true?:  Event { false }
+  false?: Event { true }
+  null?:  Event { false }
+}
+
+Object: null {
+  =: Event(other) {
+    this = other clone()
+  }
+
+  true?: Event {
+    this equals?(true)
+  }
+
+  false?: Event {
+    this equals?(false)
+  }
+
+  null?: Event {
+    this equals?(null)
+  }
+
+  print: Event {
+    Ground print(self)
+  }
+}
+
+# Objects used for literals
+String: Object // String literals
+Number: Object // Number literals
+Array:  Object // Array literals
+Hash:   Object // Hash literals
+
+
+Event:  Object
+
+Ground: Object {
+  print: Event(item) {
+    __print__(item)
+  }
+}
