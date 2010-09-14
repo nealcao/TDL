@@ -23,14 +23,16 @@ Syntax for event triggering:
 
 # Inheritance, predefined objects, etc
 
-All events without a receiver are ran on the `Ground` object.
-Objects all inherit from the object `Object`.
+Non-existant objects are references to the `null` object.
+`Object` inherits from `null` and adds methods to it.
+Objects, excluding `null`, all inherit from the object `Object`.
 Events all inherit from the object `Event`.
 Numbers all inherit from the object `Number`.
 Strings all inherit from the object `String`.
 Booleans all inherit from the object `Boolean`.
 Arrays all inherit from the object `Array`.
 Hashes all inherit from the object `Hash`.
+All events without a receiver are ran on the `Ground` object.
 
 # Ground object
 
@@ -132,7 +134,7 @@ All objects inherit from Object.
     }
 
 
-# Special syntax to allow names
+# Special syntax
 
 Any object following a colon is considered an object or attribute reference.
 The original reasoning for adding this was to allow for objects that would otherwise be interpreted as numbers.
@@ -144,5 +146,8 @@ The original reasoning for adding this was to allow for objects that would other
       }
       2: Event { // unambiguous enough to not requrie a leading colon
         :001 print() // ambiguous enough to require a colon, the `001` could be a number
+      }
+      3: Event { // unambiguous enough to not requrie a leading colon
+        print(:001) // ambiguous enough to require a colon, the `001` could be a number, this is the same as calling `Ground print(:001)`
       }
     }
