@@ -23,15 +23,17 @@ Syntax for event triggering:
 
 # Inheritance and predefined objects
 
-Non-existant objects are references to the `null` object (predefined).
+Non-existant objects are references to the `null` object (predefined as `__null__`).
 
 `Object` inherits from `null` and adds methods to it.
 
 Objects - excluding `null`, `true`, and `false` - all inherit from the object `Object`.
 
-Events all inherit from the object `Event` (predefined).
+Events all inherit from the object `Event` (predefined as `__event__`).
 
-Constructs all inherit from the object `Construct` (predefined).
+Constructs all inherit from the object `Construct` (predefined as `__construct__`).
+
+All `Event` and `Construct` arguments inherit from the object `Argument` (predefined as `__argument__`)
 
 Numbers all inherit from the object `Number`.
 
@@ -50,7 +52,7 @@ All events without a receiver are ran on the `Ground` object.
 The following predefined events exist on all objects:
     __clone__()
     __print__(item)
-    __string_length__()
+    __string_size__()
     __string_concat__(other)
     __string_replace__(current, other, all) // `all` is `true` if you want to replace all instances,
                                             // and `false` otherwise
@@ -70,9 +72,16 @@ The following predefined events exist on all objects:
     __lt_gt_equal__(other)
     __number_floor__()
     __number_to_string__()
-    __array_get__(i)
-    __array_set__(i, value)
-    __array_length__()
+    __hash_get__(key)
+    __hash_set__(key, value)
+    __hash_size__()
+
+# Predefined constructs
+
+The following predefined constructs exist on all objects:
+    __while__(condition, block)
+    __if__(condition, block)
+    __hash_each__(block)
 
 # Ground object
 
@@ -103,6 +112,36 @@ To add create a new object, and add new events later:
       }
     }
 
+# Events and Constructs
+
+Arguments to events and constructs inherit from the `Argument` object (which should not used directly), and are not evaluated until you invoke the `call()` method
+
+Events - despite being objects - work as what most languages would call methods, very straight-forward:
+    A: Object {
+      foo: Event {
+        # Everything here is ran when you do `A foo()`
+      }
+    }
+
+Constructs are like events but the last argument is always a _block_ and none of the arguments are evaluated until you raise the `call()` event on them.
+There is a `call!()` event (defined in core.tdl) which is the same as `argName = argName call()`
+    Number {
+      upto: Construct(limit, block) {
+        i: this
+        limit call!()
+        while(i < limit) {
+          block call(i)
+          i += 1
+        }
+      }
+    }
+    
+    init {
+      1 upto(10) { |i|
+        i toString() print()
+      }
+    }
+
 # Properties
 
 A property, also known by about a million other names, is a variable which references an object.  There are no other variables in TDL.
@@ -117,6 +156,8 @@ Properties are per-object, since code is never actually executed outside of even
 # Object Initialization
 
 The `init` event is called when the object is created. The object is created as it is found in the code, when the program starts.
+
+`Ground init()` is called when the program starts.
 
 For instance, in the following example, `A` is created before `B`.
     A: Object {
