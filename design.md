@@ -187,7 +187,7 @@ For instance, in the following example, `A` is created before `B`.
 `This` returns a clone of the current object.
     B: Object {
       clone: Event {
-        This // returns a clone of `A`
+        This // returns a clone of `B`
       }
     }
 
