@@ -24,14 +24,23 @@ Syntax for event triggering:
 # Inheritance, predefined objects, etc
 
 Non-existant objects are references to the `null` object.
+
 `Object` inherits from `null` and adds methods to it.
+
 Objects, excluding `null`, all inherit from the object `Object`.
+
 Events all inherit from the object `Event`.
+
 Numbers all inherit from the object `Number`.
+
 Strings all inherit from the object `String`.
+
 Booleans inherit from either `true` or `false`.
+
 Arrays all inherit from the object `Array`.
+
 Hashes all inherit from the object `Hash`.
+
 All events without a receiver are ran on the `Ground` object.
 
 # Ground object
@@ -77,6 +86,7 @@ Properties are per-object, since code is never actually executed outside of even
 # Object Initialization
 
 The `init` event is called when the object is created. The object is created as it is found in the code, when the program starts.
+
 For instance, in the following example, `A` is created before `B`.
     A: Object {
       init: Event {
@@ -90,7 +100,7 @@ For instance, in the following example, `A` is created before `B`.
       }
     }
 
-# `this`, `This`, `parent`, and `Parent`
+# this, This, parent, and Parent
 
 `this` returns a reference to the current object.
     A: Object {
@@ -137,6 +147,7 @@ All objects inherit from Object.
 # Special syntax
 
 Any object following a colon is considered an object or attribute reference.
+
 The original reasoning for adding this was to allow for objects that would otherwise be interpreted as numbers.
     A: Object {
       init: Event {
