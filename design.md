@@ -162,3 +162,11 @@ The original reasoning for adding this was to allow for objects that would other
         print(:001) // ambiguous enough to require a colon, the `001` could be a number, this is the same as calling `Ground print(:001)`
       }
     }
+
+# Comments
+
+Any line starting with `//` or `#` are comments, and data contained within `/*` and `*/` are comments
+    // This is one comment
+    # This is another
+    /* And this,
+       is yet another */
