@@ -2,29 +2,61 @@
  * core.tdl - Copyright (c) 2010 Nick Markwell
  *
  * Core definitions of TDL
+ *
+ * Builtin objects are named `__x__` as opposed to `x` to avoid conflicts
+ *
+ * We use builtins where the alternatives are provided, unless we know
+ * 100% for sure that they will be available.
+ *
+ * ie: `Ground` is defined last since it relies on everything else in this file,
+ *     so we can not use `Ground print(...)` but must use `__print__(...)` instead
  */
 
-null: __null__ // `__null__` is the built-in object
-true: null
-false: null
+Argument: __argument__ {
+  call!: Event {
+    this = this call()
+  }
+}
 
-# `null` is originally defined elsewhere
-null {
+# `__null__` is a built-in object
+null: __null__ {
+  clone: Event {
+    this __clone__()
+  }
+
   ==: Event(other) {
-    this equals?(other)
+    other null?()
   }
 
   !=: Event(other) {
-    this equals?(other) negate()
+    other null?() negate()
   }
 
-  !: Event { false }
+  print: Event {
+    __print__("")
+  }
 
+  println: Event {
+    __print__("\n")
+  }
+
+  inspect: Event {
+    "null"
+  }
+}
+
+true: null  // `true` inherits everything previously defined for `null`
+false: null // `true` inherits everything previously defined for `null`
+
+# Now we add everything in `null` that uses `true` or `false`
+null {
+  !: Event { false }
   true?:  Event { false }
   false?: Event { true }
   null?:  Event { true }
 }
 
+# Now we add everything in `true` that uses `true` or `false`
 true {
   !: Event { false }
   true?:  Event { true }
@@ -32,6 +64,7 @@ true {
   null?:  Event { false }
 }
 
+# Now we add everything in `true` that uses `true` or `false`
 false {
   !: Event { true }
   true?:  Event { false }
@@ -39,39 +72,336 @@ false {
   null?:  Event { false }
 }
 
-Object: null {
+/* `Object` is a clone of `true` because there's no use redefining
+ *  everything `true` already defined as exactly the same values
+ */
+Object: true {
   =: Event(other) {
     this = other clone()
   }
 
-  true?: Event {
-    this equals?(true)
-  }
-
-  false?: Event {
-    this equals?(false)
-  }
-
-  null?: Event {
-    this equals?(null)
-  }
+  id = __id__
+  name = __name__
 
   print: Event {
-    Ground print(self)
+    __print__(self)
+  }
+
+  inspect: Event {
+    __print__("#<")
+    __print__(this name)
+    __print__(":")
+    __print__(this id)
+    __print__(">")
   }
 }
-
-# Objects used for literals
-String: Object // String literals
-Number: Object // Number literals
-Array:  Object // Array literals
-Hash:   Object // Hash literals
-
-
-Event:  Object
 
 Ground: Object {
   print: Event(item) {
     __print__(item)
+  }
+
+  while: Construct(condition, block) {
+    __while__(condition, block)
+  }
+
+  if: Construct(condition, block) {
+    __if__(condition, block)
+  }
+}
+
+# String literals
+String: Object {
+  size: Event {
+    this __string_size__()
+  }
+
+  inspect: {
+    "\"" + this + "\""
+  }
+
+  +: Event(other) {
+    this __string_concat__(other)
+  }
+
+  +=: Event(other) {
+    this = this __concatenate__(other)
+  }
+
+  sub: Event(current, other) {
+    this __string_replace__(current, other, false)
+  }
+
+  gsub: Event(current, other) {
+    this __string_replace__(current, other, true)
+  }
+
+  sub!: Event(current, other) {
+    this = this sub(current, other)
+  }
+
+  gsub!: Event(current, other) {
+    this = this gsub(current, other)
+  }
+
+  []: Event(position) {
+    this __substring__(position)
+  }
+
+  []=: Event(position, value) {
+    this __substring_replace__(position, value)
+  }
+
+  eachLetter: Construct(block) {
+    0 upto(this size(), |i|
+      block call(this[i])
+    )
+  }
+}
+
+# Number literals
+Number: Object {
+  +: Event(other) {
+    this __add__(other)
+  }
+
+  -: Event(other) {
+    this __subtract__(other)
+  }
+
+  *: Event(other) {
+    this __multiply__(other)
+  }
+
+  /: Event(other) {
+    this __divide__(other)
+  }
+
+  %: Event(other) {
+    this __modulo__(other)
+  }
+
+  **: Event(other) {
+    this __pow__(other)
+  }
+
+  <<: Event(other) {
+    this __left_shift__(other)
+  }
+
+  >>: Event(other) {
+    this __right_shift__(other)
+  }
+
+  &: Event(other) {
+    this __bitwise_and__(other)
+  }
+
+  |: Event(other) {
+    this __bitwise_or__(other)
+  }
+
+  ^: Event(other) {
+    this __bitwise_xor__(other)
+  }
+
+  +=: Event(other) {
+    this = this + other
+  }
+
+  -=: Event(other) {
+    this = this - other
+  }
+
+  *=: Event(other) {
+    this = this * other
+  }
+
+  /=: Event(other) {
+    this = this / other
+  }
+
+  %=: Event(other) {
+    this = this % other
+  }
+
+  **=: Event(other) {
+    this = this ** other
+  }
+
+  <<=: Event(other) {
+    this = this << other
+  }
+
+  >>=: Event(other) {
+    this = this >> other
+  }
+
+  &=: Event(other) {
+    this = this & other
+  }
+
+  |=: Event(other) {
+    this = this | other
+  }
+
+  ^=: Event(other) {
+    this = this ^ other
+  }
+
+  <=>: Event(other) {
+    __lt_gt_equal__(other)
+  }
+
+  <: Event(other) {
+    (this <=> other == -1)
+  }
+
+  ==: Event(other) {
+    (this <=> other == 0)
+  }
+
+  >: Event(other) {
+    (this <=> other == 1)
+  }
+
+  <=: Event(other) {
+    (this < other || this == other)
+  }
+
+  >=: Event(other) {
+    (this > other || this == other)
+  }
+
+  ~: Event {
+    if(this floor() != this) {
+      null
+    } else {
+      if(this < 0) {
+        this negate() - 1
+      } else if(this > 0) {
+        this negate() + 1
+      } else {
+        -1
+      }
+    }
+  }
+
+  negate: Event {
+    this - this - this // Yes, seriously
+  }
+
+  zero?: Event {
+    (this == 0)
+  }
+
+  odd?: Event {
+    (this % 2 == 1)
+  }
+
+  even?: Event {
+    (this % 2 == 0)
+  }
+
+  abs: Event {
+    if(this < 0) {
+      this negate()
+    } else {
+      this
+    }
+  }
+
+  floor: Event {
+    __number_floor__(this)
+  }
+
+  ceil: Event {
+    if(this floor() < this) {
+      this floor() + 1
+    } else {
+      this floor()
+    }
+  }
+
+  toString: Event {
+    this __number_to_string__()
+  }
+
+  inpect: Event {
+    this toString()
+  }
+
+  upto: Construct(other, block) {
+    i: this
+    while(i < other) {
+      block call(i)
+      i += 1
+    }
+  }
+
+  downto: Construct(other, block) {
+    i: this
+    while(i > other) {
+      block call(i)
+      i -= 1
+    }
+  }
+
+  to: Construct(other, block) {
+    if(this < other) {
+      this upto(other, block)
+    } else if(this > other) {
+      this downto(other, block)
+    }
+  }
+}
+
+# Hash literals
+Hash: Object {
+  []: Event(i) {
+    this __hash_get__(i)
+  }
+
+  []= Event(i, value) {
+    this __hash_set__(i, value)
+  }
+
+  size: Event {
+    this __hash_size__()
+  }
+
+  inspect: Event {
+    tmp = "["
+    i = 0
+    this each { |k, v|
+      tmp += k inspect()
+      tmp += ": "
+      tmp += v inspect()
+
+      i += 1
+      if(i < (this size() - 1)) {
+        tmp += ", "
+      }
+    }
+    tmp += "]"
+  }
+
+  each: Construct(block) {
+    __hash_each__(block)
+  }
+}
+
+# Array literals
+Array: Hash {
+  inspect: Event {
+    tmp = "["
+    this each { |i, v|
+      tmp += v inspect()
+
+      if(i < (this size() - 1)) {
+        tmp += ", "
+      }
+    }
+    tmp += "]"
   }
 }
