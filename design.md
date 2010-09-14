@@ -27,7 +27,7 @@ Non-existant objects are references to the `null` object.
 
 `Object` inherits from `null` and adds methods to it.
 
-Objects, excluding `null`, all inherit from the object `Object`.
+Objects - excluding `null`, `true`, and `false` - all inherit from the object `Object`.
 
 Events all inherit from the object `Event`.
 
