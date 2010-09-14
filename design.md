@@ -29,7 +29,7 @@ Objects, excluding `null`, all inherit from the object `Object`.
 Events all inherit from the object `Event`.
 Numbers all inherit from the object `Number`.
 Strings all inherit from the object `String`.
-Booleans all inherit from the object `Boolean`.
+Booleans inherit from either `true` or `false`.
 Arrays all inherit from the object `Array`.
 Hashes all inherit from the object `Hash`.
 All events without a receiver are ran on the `Ground` object.
