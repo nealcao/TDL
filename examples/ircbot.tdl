@@ -35,5 +35,5 @@ IRC: Socket {
 
 init: Event {
   bot: IRC
-  bot run
+  bot run()
 }
