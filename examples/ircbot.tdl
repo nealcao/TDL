@@ -3,8 +3,10 @@ IRC: Socket {
     You can define events that only work from inside a particular class
     *insert mass suicide before people see how amazing this looks later*
   */
-  String send: Event {
-    parent send(self)
+  String {
+    send: Event {
+      parent send(self)
+    }
   }
 
   run: Event {
