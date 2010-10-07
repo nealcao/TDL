@@ -227,10 +227,10 @@ The original reasoning for adding this was to allow for objects that would other
         001 = "meep" // unambiguous enough to not require a leading colon
         FOO print() // this is the same as just `FOO`
       }
-      2: Event { // unambiguous enough to not requrie a leading colon
+      2: Event { // unambiguous enough to not require a leading colon
         :001 print() // ambiguous enough to require a colon, the `001` could be a number
       }
-      3: Event { // unambiguous enough to not requrie a leading colon
+      3: Event { // unambiguous enough to not require a leading colon
         print(:001) // ambiguous enough to require a colon, the `001` could be a number, this is the same as calling `Ground print(:001)`
       }
     }
