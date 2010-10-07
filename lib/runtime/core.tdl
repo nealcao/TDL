@@ -391,7 +391,7 @@ Hash: Object {
     this __hash_get__(i)
   }
 
-  []= Event(i, value) {
+  []=: Event(i, value) {
     this __hash_set__(i, value)
   }
 
