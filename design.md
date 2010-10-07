@@ -202,7 +202,7 @@ For instance, in the following example, `A` is created before `B`.
     D: Object {
       reset: Event {
         this = Parent /* replace the current object with a new clone of
-                         the object was a clone of, `Object` in this case */*!!!!! REMOVE THIS !!!!! Added because geany is weird at highlighting markdown
+                         the object was a clone of, `Object` in this case */
       }
     }
 
