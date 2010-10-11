@@ -356,7 +356,7 @@ Number: Object {
     this __number_to_string__()
   }
 
-  inpect: Event {
+  inspect: Event {
     this toString()
   }
 
