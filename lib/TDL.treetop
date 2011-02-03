@@ -1,8 +1,12 @@
 grammar TDL
 
-#  rule program
-#    identifier / number
-#  end
+  rule program
+    identifier / number
+  end
+
+  rule number
+    decimal_number
+  end
 
   rule identifier
     letter (letter / decimal_integer / underscore_token)* questionmark_opt
@@ -38,9 +42,21 @@ grammar TDL
     [0-9]
   end
 
-  # A decimal number, one or more digits
+  # A decimal integer, one or more digits
   rule decimal_integer
     decimal_digit+
+  end
+
+  # A decimal float, one or more digits
+  # followed by a period followed by one or more digits
+  rule decimal_float
+    decimal_integer period_token decimal_integer
+  end
+
+  # A decimal number, either a decimal float
+  # or a decimal integer
+  rule decimal_number
+    decimal_float / decimal_integer
   end
 
   # A single octal digit
@@ -48,7 +64,7 @@ grammar TDL
     [0-7]
   end
 
-  # A octal number, one or more digits
+  # A octal integer, one or more digits
   rule octal_integer
     octal_digit+
   end
@@ -58,7 +74,7 @@ grammar TDL
     [0-1]
   end
 
-  # A binary number, one or more digits
+  # A binary integer, one or more digits
   rule binary_integer
     binary_digit+
   end
@@ -68,7 +84,7 @@ grammar TDL
     decimal_digit / [a-fA-F]
   end
 
-  # A hexadecimal number, one or more digits
+  # A hexadecimal integer, one or more digits
   rule hex_integer
     hex_digit+
   end
@@ -117,6 +133,11 @@ grammar TDL
   # Represents an optional question mark
   rule questionmark_opt
     questionmark_token?
+  end
+
+  # Represents a single period_token
+  rule period_token
+    '.'
   end
 
   # Character used to escape other characters.
