@@ -1,7 +1,7 @@
 grammar TDL
 
   rule program
-    identifier / number
+    identifier / number / string
   end
 
   rule number
@@ -12,14 +12,20 @@ grammar TDL
     letter (letter / decimal_integer / underscore_token)* questionmark_opt
   end
 
-  # TODO: Add proper escaping
-  rule single_quote_seq
-    "'" .+ "'"
+  # Single-quoted or double-quoted string.
+  rule string
+    single_quote_seq / double_quote_seq
   end
 
-  # TODO: Add proper escaping
+  # Single-quoted string: only backslashes (\) and single quotes (') can be escaped.
+  rule single_quote_seq
+    "'" (escape_char single_quote_token / [^'])+ "'"  # " # Hackity hack hack to fix gedit's highlighting derp
+  end
+
+  # Double-quoted string: all escape codes work.
   rule double_quote_seq
-    '"' .+ '"'
+    '"' (escape_char double_quote_token / [^"])+ '"'  # " # Hackity hack hack to fix gedit's highlighting derp
+    #'"' [a-z]+ '"'
   end
 
   # A single uppercase letter
@@ -135,9 +141,19 @@ grammar TDL
     questionmark_token?
   end
 
-  # Represents a single period_token
+  # Represents a single period
   rule period_token
     '.'
+  end
+
+  # Represents a single quote
+  rule single_quote_token
+    "'"
+  end
+
+  # Represents a double quote
+  rule double_quote_token
+    '"'
   end
 
   # Character used to escape other characters.
