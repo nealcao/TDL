@@ -25,7 +25,6 @@ grammar TDL
   # Double-quoted string: all escape codes work.
   rule double_quote_seq
     '"' (escape_char double_quote_token / [^"])+ '"'  # " # Hackity hack hack to fix gedit's highlighting derp
-    #'"' [a-z]+ '"'
   end
 
   # A single uppercase letter
