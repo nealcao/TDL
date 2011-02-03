@@ -1,0 +1,128 @@
+grammar TDL
+
+#  rule program
+#    identifier / number
+#  end
+
+  rule identifier
+    letter (letter / decimal_integer / underscore_token)* questionmark_opt
+  end
+
+  # TODO: Add proper escaping
+  rule single_quote_seq
+    "'" .+ "'"
+  end
+
+  # TODO: Add proper escaping
+  rule double_quote_seq
+    '"' .+ '"'
+  end
+
+  # A single uppercase letter
+  rule uppercase_letter
+    [a-z]
+  end
+
+  # A single lowercase letter
+  rule lowercase_letter
+    [A-Z]
+  end
+
+  # A single letter (uppercase or lowercase)
+  rule letter
+    uppercase_letter / lowercase_letter
+  end
+
+  # A single decimal digit
+  rule decimal_digit
+    [0-9]
+  end
+
+  # A decimal number, one or more digits
+  rule decimal_integer
+    decimal_digit+
+  end
+
+  # A single octal digit
+  rule octal_digit
+    [0-7]
+  end
+
+  # A octal number, one or more digits
+  rule octal_integer
+    octal_digit+
+  end
+
+  # A single binary digit
+  rule binary_digit
+    [0-1]
+  end
+
+  # A binary number, one or more digits
+  rule binary_integer
+    binary_digit+
+  end
+
+  # A single hexadecimal digit
+  rule hex_digit
+    decimal_digit / [a-fA-F]
+  end
+
+  # A hexadecimal number, one or more digits
+  rule hex_integer
+    hex_digit+
+  end
+
+  # MY EYES, THEY BLEEEEEEED!
+  # All valid operator symbols: ~!@#$%^&*-+|/.<>:
+  rule operator_symbols
+    '~' / '!' / '@' / '#' / '$' / '%' / '^' / '&' / '*' / '-' / '+' / '|' / '/' / '.' / '<' / '>' / ':'
+  end
+
+  # TODO: Look into if this is the best method to handle keywords
+  rule import_kw
+    'import'
+  end
+
+  # TODO: See above
+  rule keywords
+    import_kw
+  end
+
+  # Whitespace...
+  rule whitespace
+    space_token+
+  end
+
+  # Represents a single space
+  rule space_token
+    ' '
+  end
+
+  # Represents a single newline
+  rule line_token
+    '\r\n' / '\r' / '\n' 
+  end
+
+  # Represents a single underscore
+  rule underscore_token
+    '_'
+  end
+
+  # Represents a single question mark
+  rule questionmark_token
+    '?'
+  end
+
+  # Represents an optional question mark
+  rule questionmark_opt
+    questionmark_token?
+  end
+
+  # Character used to escape other characters.
+  # It is \, but treetop/ruby needs it escaped ;)
+  rule escape_char
+    '\\'
+  end
+
+end
