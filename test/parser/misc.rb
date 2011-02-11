@@ -6,6 +6,8 @@ parser = TDLParser.new
 
 describe TDLParser do
   describe "#parse" do
-    specify { parser.parse(' '         ).should be     }
+    # Whitespace
+    specify { parser.parse(' '   ).should be }
+    specify { parser.parse('    ').should be }
   end
 end

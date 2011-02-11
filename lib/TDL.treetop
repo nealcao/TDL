@@ -1,21 +1,36 @@
 grammar TDL
 
+  # The main program rule
   rule program
     assignment_statement / statement / whitespace
   end
 
+  # A single assignment statement
   rule assignment_statement
     identifier whitespace? equals_sign_token whitespace? statement
   end
-  
+
+  # A single statement
   rule statement
-    identifier / number / string
+    function_call / tuple / identifier / number / string
   end
 
+  # A function call, of the form fn(a, b)
+  rule function_call
+    identifier whitespace? tuple
+  end
+
+  # A tuple, of the form (a, b) - can have any number of items, including 0
+  rule tuple
+    open_parentheses_token whitespace? (statement whitespace? comma_token? whitespace?)* close_parentheses_token
+  end
+
+  # A number literal
   rule number
     decimal_number
   end
 
+  # An identifier literal
   rule identifier
     letter (letter / decimal_integer / underscore_token)* questionmark_token?
   end
@@ -148,6 +163,11 @@ grammar TDL
     '.'
   end
 
+  # Represents a single comma
+  rule comma_token
+    ','
+  end
+
   # Represents a single quote
   rule single_quote_token
     "'"
@@ -161,6 +181,16 @@ grammar TDL
   # Represents a equals sign
   rule equals_sign_token
     '='
+  end
+
+  # Represents an opening parentheses
+  rule open_parentheses_token
+    '('
+  end
+  
+  # Represents a closing parentheses
+  rule close_parentheses_token
+    ')'
   end
 
   # Character used to escape other characters.
