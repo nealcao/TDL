@@ -23,7 +23,7 @@ Syntax for event triggering:
 
 # Inheritance and predefined objects
 
-Non-existant objects are references to the `null` object (inherits from `Predefine null`).
+Non-existant objects are references to the `null` object (inherits from `Predefined null`).
 
 `Object` inherits from `null` and adds methods to it.
 
@@ -94,8 +94,8 @@ To set `A` as a copy of `B`:
 
 To add new events to `A` that are not in `B` while defining the object:
     A: B {
-      foo: Event {
         "hai"
+      foo: Event {
       }
     }
 
