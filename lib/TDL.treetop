@@ -1,6 +1,14 @@
 grammar TDL
 
   rule program
+    assignment_statement / statement / whitespace
+  end
+
+  rule assignment_statement
+    identifier whitespace? equals_sign_token whitespace? statement
+  end
+  
+  rule statement
     identifier / number / string
   end
 
@@ -9,7 +17,7 @@ grammar TDL
   end
 
   rule identifier
-    letter (letter / decimal_integer / underscore_token)* questionmark_opt
+    letter (letter / decimal_integer / underscore_token)* questionmark_token?
   end
 
   # Single-quoted or double-quoted string.
@@ -24,7 +32,7 @@ grammar TDL
 
   # Double-quoted string: all escape codes work.
   rule double_quote_seq
-    '"' (escape_char double_quote_token / [^"])+ '"'  # " # Hackity hack hack to fix gedit's highlighting derp
+    '"' (escape_char double_quote_token / [^"])+ '"'  # ' # Hackity hack hack to fix gedit's highlighting derp
   end
 
   # A single uppercase letter
@@ -95,9 +103,9 @@ grammar TDL
   end
 
   # MY EYES, THEY BLEEEEEEED!
-  # All valid operator symbols: ~!@#$%^&*-+|/.<>:
+  # All valid operator symbols: ~!@#$%^&*-+|/.<>:=
   rule operator_symbols
-    '~' / '!' / '@' / '#' / '$' / '%' / '^' / '&' / '*' / '-' / '+' / '|' / '/' / '.' / '<' / '>' / ':'
+    '~' / '!' / '@' / '#' / '$' / '%' / '^' / '&' / '*' / '-' / '+' / '|' / '/' / '.' / '<' / '>' / ':' / '='
   end
 
   # TODO: Look into if this is the best method to handle keywords
@@ -110,7 +118,7 @@ grammar TDL
     import_kw
   end
 
-  # Whitespace...
+  # Required whitespace
   rule whitespace
     space_token+
   end
@@ -135,11 +143,6 @@ grammar TDL
     '?'
   end
 
-  # Represents an optional question mark
-  rule questionmark_opt
-    questionmark_token?
-  end
-
   # Represents a single period
   rule period_token
     '.'
@@ -153,6 +156,11 @@ grammar TDL
   # Represents a double quote
   rule double_quote_token
     '"'
+  end
+
+  # Represents a equals sign
+  rule equals_sign_token
+    '='
   end
 
   # Character used to escape other characters.
