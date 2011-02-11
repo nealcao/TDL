@@ -94,8 +94,8 @@ To set `A` as a copy of `B`:
 
 To add new events to `A` that are not in `B` while defining the object:
     A: B {
-        "hai"
       foo: Event {
+        "hai"
       }
     }
 
