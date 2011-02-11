@@ -23,17 +23,17 @@ Syntax for event triggering:
 
 # Inheritance and predefined objects
 
-Non-existant objects are references to the `null` object (predefined as `__null__`).
+Non-existant objects are references to the `null` object (inherits from `Predefine null`).
 
 `Object` inherits from `null` and adds methods to it.
 
 Objects - excluding `null`, `true`, and `false` - all inherit from the object `Object`.
 
-Events all inherit from the object `Event` (predefined as `__event__`).
+Events all inherit from the object `Event` (inherits from `Predefined event`).
 
-Constructs all inherit from the object `Construct` (predefined as `__construct__`).
+Constructs all inherit from the object `Construct` (inherits from `Predefined construct`).
 
-All `Event` and `Construct` arguments inherit from the object `Argument` (predefined as `__argument__`)
+All `Event` and `Construct` arguments inherit from the object `Argument` (inherits from `Predefined argument`)
 
 Numbers all inherit from the object `Number`.
 
@@ -49,39 +49,39 @@ All events without a receiver are ran on the `Ground` object.
 
 # Predefined events
 
-The following predefined events exist on all objects:
-    __clone__()
-    __print__(item)
-    __string_size__()
-    __string_concat__(other)
-    __string_replace__(current, other, all) // `all` is `true` if you want to replace all instances,
-                                            // and `false` otherwise
-    __substring__(position)
-    __substring_replace__(position, value)
-    __add__(number)
-    __substract__(number)
-    __multiply__(number)
-    __divide__(number)
-    __modulo__(number)
-    __pow__(number)
-    __left_shift__(other)
-    __right_shift__(other)
-    __bitwise_and__(other)
-    __bitwise_or__(other)
-    __bitwise_xor__(other)
-    __lt_gt_equal__(other)
-    __number_floor__()
-    __number_to_string__()
-    __hash_get__(key)
-    __hash_set__(key, value)
-    __hash_size__()
+The following predefined events are defined on the `Predefined` object:
+    clone(this)
+    print(this)
+    string_size(this)
+    string_concat(this, other)
+    string_replace(this, current, other, all) // `all` is `true` if you want to replace all instances,
+                                              // and `false` otherwise
+    substring(this, position)
+    substring_replace(this, position, value)
+    add(this, number)
+    subtract(this, number)
+    multiply(this, number)
+    divide(this, number)
+    modulo(this, number)
+    pow(this, number)
+    left_shift(this, other)
+    right_shift(this, other)
+    bitwise_and(this, other)
+    bitwise_or(this, other)
+    bitwise_xor(this, other)
+    lt_gt_equal(this, other)
+    number_floor(this)
+    number_to_string(this)
+    hash_get(this, key)
+    hash_set(this, key, value)
+    hash_size(this)
 
 # Predefined constructs
 
-The following predefined constructs exist on all objects:
-    __while__(condition, block)
-    __if__(condition, block)
-    __hash_each__(block)
+The following predefined constructs are defined on the `Predefined` object:
+    while(condition, block)
+    if(condition, block)
+    hash_each(block)
 
 # Ground object
 
@@ -237,8 +237,7 @@ The original reasoning for adding this was to allow for objects that would other
 
 # Comments
 
-Any line starting with `//` or `#` are comments, and data contained within `/*` and `*/` are comments
+Any line starting with `//` is a comment, and data contained within `/*` and `*/` are comments
     // This is one comment
-    # This is another
     /* And this,
        is yet another */

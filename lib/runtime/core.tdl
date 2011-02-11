@@ -3,7 +3,7 @@
  *
  * Core definitions of TDL
  *
- * Builtin objects are named `__x__` as opposed to `x` to avoid conflicts
+ * Predefined objects/events are in the "Predefined" object
  *
  * We use builtins where the alternatives are provided, unless we know
  * 100% for sure that they will be available.
@@ -12,14 +12,16 @@
  *     so we can not use `Ground print(...)` but must use `__print__(...)` instead
  */
 
-Argument: __argument__ {
+// `Predefined argument` is a predefined object
+Argument: Predefined argument {
   call!: Event {
     this = this call()
   }
 }
 
-# `__null__` is a built-in object
-null: __null__ {
+// `Predefined null` is a predefined object
+null: Predefined null {
+  __clone__: Predefined clone
   clone: Event {
     this __clone__()
   }
@@ -33,49 +35,48 @@ null: __null__ {
   }
 
   print: Event {
-    __print__("")
+    Predefined print("")
   }
 
   println: Event {
-    __print__("\n")
+    Predefined print("\n")
   }
 
   inspect: Event {
     "null"
   }
-}
 
-true: null  // `true` inherits everything previously defined for `null`
-false: null // `true` inherits everything previously defined for `null`
-
-# Now we add everything in `null` that uses `true` or `false`
-null {
-  !: Event { false }
+  !: Event { true }
   true?:  Event { false }
   false?: Event { true }
   null?:  Event { true }
 }
 
-# Now we add everything in `true` that uses `true` or `false`
-true {
+// Now we add everything in `true` that uses `true` or `false`
+True {
   !: Event { false }
   true?:  Event { true }
   false?: Event { false }
   null?:  Event { false }
 }
 
-# Now we add everything in `true` that uses `true` or `false`
-false {
+// Now we add everything in `true` that uses `true` or `false`
+False {
   !: Event { true }
   true?:  Event { false }
   false?: Event { true }
   null?:  Event { false }
 }
 
-/* `Object` is a clone of `true` because there's no use redefining
- *  everything `true` already defined as exactly the same values
+/* `Object` is a clone of `True` because there's no use redefining
+ *  everything `True` already defined as exactly the same values
  */
-Object: true {
+Object: True {
+  __clone__: Predefined clone
+  clone: Event {
+    this __clone__()
+  }
+
   =: Event(other) {
     this = other clone()
   }
@@ -97,19 +98,19 @@ Object: true {
   name = __name__
 
   print: Event {
-    __print__(self)
+    this inspect()
   }
 
   inspect: Event {
-    __print__("#<")
-    __print__(this name)
-    __print__(":")
-    __print__(this id)
-    __print__(">")
+    Predefined print("#<")
+    Predefined print(this name)
+    Predefined print(":")
+    Predefined print(this id)
+    Predefined print(">")
   }
 }
 
-# Add more events to `true`
+// Add more events to `true`
 true {
   ==: Event(other) { other true?() }
   !=: Event(other) { other false?() }
@@ -117,7 +118,7 @@ true {
   &: Event(other) { other true?() }
 }
 
-# Add more events to `false`
+// Add more events to `false`
 false {
   ==: Event(other) { other false?() }
   !=: Event(other) { other true?() }
@@ -126,43 +127,40 @@ false {
 }
 
 Ground: Object {
-  print: Event(item) {
-    __print__(item)
-  }
+  print: Predefined print
 
-  while: Construct(condition, block) {
-    __while__(condition, block)
-  }
-
-  if: Construct(condition, block) {
-    __if__(condition, block)
-  }
+  while: Predefined while
+  if:    Predefined if
 }
 
-# String literals
+// String literals
 String: Object {
   size: Event {
-    this __string_size__()
+    Predefined string_size(this)
+  }
+
+  escape: Event {
+    Predefined string_escape(this)
   }
 
   inspect: {
-    "\"" + this + "\""
+    "\"" + this escape() + "\""
   }
 
   +: Event(other) {
-    this __string_concat__(other)
+    Predefined string_concat(this, other)
   }
 
   +=: Event(other) {
-    this = this __concatenate__(other)
+    this = this + other
   }
 
   sub: Event(current, other) {
-    this __string_replace__(current, other, false)
+    Predefined string_replace(this, current, other, false)
   }
 
   gsub: Event(current, other) {
-    this __string_replace__(current, other, true)
+    Predefined string_replace(this, current, other, true)
   }
 
   sub!: Event(current, other) {
@@ -174,11 +172,11 @@ String: Object {
   }
 
   []: Event(position) {
-    this __substring__(position)
+    Predefined substring(this, position)
   }
 
   []=: Event(position, value) {
-    this __substring_replace__(position, value)
+    Predefined substring_replace(this, position, value)
   }
 
   eachLetter: Construct(block) {
@@ -188,50 +186,50 @@ String: Object {
   }
 }
 
-# Number literals
+// Number literals
 Number: Object {
   +: Event(other) {
-    this __add__(other)
+    Predefined add(this, other)
   }
 
   -: Event(other) {
-    this __subtract__(other)
+    Predefined subtract(this, other)
   }
 
   *: Event(other) {
-    this __multiply__(other)
+    Predefined multiply(this, other)
   }
 
   /: Event(other) {
-    this __divide__(other)
+    Predefined divide(this, other)
   }
 
   %: Event(other) {
-    this __modulo__(other)
+    Predefined modulo(this, other)
   }
 
   **: Event(other) {
-    this __pow__(other)
+    Predefined pow(this, other)
   }
 
   <<: Event(other) {
-    this __left_shift__(other)
+    Predefined left_shift(this, other)
   }
 
   >>: Event(other) {
-    this __right_shift__(other)
+    Predefined right_shift(this, other)
   }
 
   &: Event(other) {
-    this __bitwise_and__(other)
+    Predefined bitwise_and(this, other)
   }
 
   |: Event(other) {
-    this __bitwise_or__(other)
+    Predefined bitwise_or(this, other)
   }
 
   ^: Event(other) {
-    this __bitwise_xor__(other)
+    Predefined bitwise_xor(this, other)
   }
 
   +=: Event(other) {
@@ -279,7 +277,7 @@ Number: Object {
   }
 
   <=>: Event(other) {
-    __lt_gt_equal__(other)
+    Predefined lt_gt_equal(this, other)
   }
 
   <: Event(other) {
@@ -385,7 +383,7 @@ Number: Object {
   }
 }
 
-# Hash literals
+// Hash literals
 Hash: Object {
   []: Event(i) {
     this __hash_get__(i)
@@ -420,7 +418,7 @@ Hash: Object {
   }
 }
 
-# Array literals
+// Array literals
 Array: Hash {
   inspect: Event {
     tmp = "["
