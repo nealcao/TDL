@@ -7,8 +7,7 @@ IRC: Socket {
     send: Event {
       parent send(self)
     }
-  }
-
+  }/*added by neal*/
   run: Event {
     connect ("irc.ninthbit.net", 6667)
     "USER a b c d" send()
